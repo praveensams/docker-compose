@@ -1,16 +1,17 @@
 FROM centos
 
+
 RUN useradd docker_root \
-    && yum install openssh-7.4p1-13.el7_4.x86_64 openssh-server openssh-clients -y \
+    && yum install openssh-7.4p1-13.el7_4.x86_64 openssh-server openssh-clients sudo -y \
     && mkdir /share \
     && chown -R docker_root:docker_root /share \
-    &&  ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
+    &&  ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa \
+    && echo 'docker_root ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/docker_root
 
 USER docker_root
 
-RUN  /bin/ssh-keygen -t rsa -q -f $HOME/.ssh/id_rsa -N "" \
-     && cp -rf $HOME/.ssh/id_rsa.pub /tmp/authorized_keys 
+RUN  /bin/ssh-keygen -t rsa -q -f /home/docker_root/.ssh/id_rsa -N "" \
+     && cp -rf /home/docker_root/.ssh/id_rsa.pub /tmp/authorized_keys 
      
-USER root
 
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["sudo", "/usr/sbin/sshd", "-D"]
