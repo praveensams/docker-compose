@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+
+
+  ssh_server1:
+    build: 
+      context: .
+      dockerfile: dockerfile_cont1
+    container_name: sshserver1
+    links: 
+      - ssh_server2
+
+  ssh_server2:
+    build: 
+      context: .
+      dockerfile: dockerfile_cont2
+    container_name: sshserver2
+

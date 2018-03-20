@@ -1,0 +1,15 @@
+FROM centos
+
+RUN useradd docker_root \
+    && yum install openssh-7.4p1-13.el7_4.x86_64 openssh-server openssh-clients -y \
+    && mkdir /share \
+    && chown -R docker_root:docker_root /share \
+    &&  ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
+
+USER docker_root
+
+RUN  /bin/ssh-keygen -t rsa -q -f $HOME/.ssh/id_rsa -N "" 
+     
+USER root
+
+CMD ["/usr/sbin/sshd", "-D"]
