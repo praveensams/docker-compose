@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "6060:80"
+    volumes:
+      - share:/var/www/html
+    networks:
+      app_net:
+        ipv4_address: 10.0.0.2
+
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 10.0.0.0/24
+
+volumes:
+  share:
